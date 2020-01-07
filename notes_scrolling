@@ -1,0 +1,27 @@
+To make a plot scroll, you have three options:
+
+    Scroll the raw data and re-plot (see numpy.roll)
+
+    curve = plotItem.plot(data)
+    data = np.roll(data, 1)  # scroll data
+    curve.setData(data)      # re-plot
+
+    Move the plot curve so that it slides across the view:
+
+    curve = plotItem.plot(data)
+    curve.setPos(x, 0)  # Move the curve
+
+    Move the view region such that the plot curve appears to scroll
+
+    curve = plotItem.plot(data)
+    plotItem.setXRange(x1, x2)  # Move the view
+
+
+
+Here are a couple of options (to update candle faster):
+
+    Make your custom item draw only one bar, and simply add a new item for each new data point. This would avoid the need to regenerate the entire picture, but might have slower performance with interactive zoom / pan when you are displaying many items.
+
+    Use a hybrid approach where you add new bars to CandleStickItem until it reaches some maximum size, and then start a new CandleStickItem (but keep the old ones as well). That way, each new bar will only cause a small amount of effort in generatePicture(), but you keep the total number of calls to paint() smaller.
+
+
